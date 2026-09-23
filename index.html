@@ -7,14 +7,12 @@
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* تخصيص تأثيرات التوهج الذهبي الفاخر */
         .gold-glow {
             box-shadow: 0 0 20px rgba(234, 179, 8, 0.4), inset 0 0 10px rgba(234, 179, 8, 0.2);
         }
         .gold-text-glow {
             text-shadow: 0 0 10px rgba(234, 179, 8, 0.6), 0 0 20px rgba(234, 179, 8, 0.4);
         }
-        /* تحسين مظهر شريط التمرير */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -41,9 +39,9 @@
 
     <!-- Chat Box Container -->
     <div id="chat-container" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 max-w-3xl w-full mx-auto">
-        <!-- Welcoming Message -->
-        <div class="flex items-start space-x-4 space-x-reverse">
-            <div class="bg-gradient-to-br from-amber-500 to-amber-700 text-black font-extrabold rounded-2xl h-12 w-12 flex items-center justify-center shadow-lg gold-glow text-lg">AI</div>
+        <!-- Welcoming Message (Bot on Left) -->
+        <div class="flex items-start space-x-4 space-x-reverse justify-start">
+            <div class="bg-gradient-to-br from-amber-500 to-amber-700 text-black font-extrabold rounded-2xl h-12 w-12 flex items-center justify-center shadow-lg gold-glow text-lg shrink-0">AI</div>
             <div class="bg-neutral-900 border-2 border-amber-500/40 p-4 md:p-5 rounded-3xl max-w-xl shadow-xl gold-glow">
                 <p class="text-lg md:text-xl text-amber-200 leading-relaxed">أهلاً بك! كيف يمكنني مساعدتك اليوم؟</p>
             </div>
@@ -63,7 +61,7 @@
             >
             <button 
                 type="submit" 
-                class="bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-black px-7 py-3.5 rounded-2xl text-base md:text-lg font-bold transition-all duration-300 shadow-lg gold-glow active:scale-95"
+                class="bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-black px-7 py-3.5 rounded-2xl text-base md:text-lg font-bold transition-all duration-300 shadow-lg gold-glow active:scale-95 shrink-0"
             >
                 إرسال
             </button>
@@ -89,7 +87,6 @@
             const loadingId = appendLoadingMessage();
 
             try {
-                // Fetch request using relative path for Render
                 const response = await fetch('/chat', {
                     method: 'POST',
                     headers: {
@@ -117,10 +114,12 @@
         function appendMessage(text, sender) {
             const isUser = sender === 'user';
             const messageDiv = document.createElement('div');
-            messageDiv.className = `flex items-start space-x-4 space-x-reverse ${isUser ? 'flex-row-reverse space-x-reverse' : ''}`;
+            
+            // المستخدم على اليمين (flex-row-reverse مع justify-start)، والبوت على اليسار
+            messageDiv.className = `flex items-start space-x-4 space-x-reverse ${isUser ? 'justify-start flex-row-reverse' : 'justify-start'}`;
 
             messageDiv.innerHTML = `
-                <div class="${isUser ? 'bg-gradient-to-br from-neutral-700 to-neutral-900 text-amber-400 border border-amber-500/40' : 'bg-gradient-to-br from-amber-500 to-amber-700 text-black'} rounded-2xl h-12 w-12 flex items-center justify-center font-bold text-base shadow-lg gold-glow">
+                <div class="${isUser ? 'bg-gradient-to-br from-neutral-700 to-neutral-900 text-amber-400 border border-amber-500/40' : 'bg-gradient-to-br from-amber-500 to-amber-700 text-black'} rounded-2xl h-12 w-12 flex items-center justify-center font-bold text-base shadow-lg gold-glow shrink-0">
                     ${isUser ? 'أنت' : 'AI'}
                 </div>
                 <div class="${isUser ? 'bg-neutral-900 border-2 border-neutral-700 text-amber-100' : 'bg-neutral-900 border-2 border-amber-500/50 text-amber-200'} p-4 md:p-5 rounded-3xl max-w-xl shadow-xl text-base md:text-lg leading-relaxed gold-glow">
@@ -136,10 +135,10 @@
             const id = 'loading-' + Date.now();
             const messageDiv = document.createElement('div');
             messageDiv.id = id;
-            messageDiv.className = 'flex items-start space-x-4 space-x-reverse';
+            messageDiv.className = 'flex items-start space-x-4 space-x-reverse justify-start';
 
             messageDiv.innerHTML = `
-                <div class="bg-gradient-to-br from-amber-500 to-amber-700 text-black rounded-2xl h-12 w-12 flex items-center justify-center font-bold text-base shadow-lg gold-glow">AI</div>
+                <div class="bg-gradient-to-br from-amber-500 to-amber-700 text-black rounded-2xl h-12 w-12 flex items-center justify-center font-bold text-base shadow-lg gold-glow shrink-0">AI</div>
                 <div class="bg-neutral-900 border-2 border-amber-500/50 p-4 md:p-5 rounded-3xl shadow-xl text-base md:text-lg text-amber-300 gold-glow">
                     <p class="animate-pulse">جاري الكتابة...</p>
                 </div>

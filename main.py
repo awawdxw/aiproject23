@@ -29,9 +29,14 @@ async def chat_endpoint(request: ChatRequest):
     try:
         user_msg = request.message.strip()
         
-        # التحقق من السؤال عن الصانع بدقة
-        creator_keywords = ["من صنعك", "من بناءك", "من كتبك", "من صممك", "من خلاك", "who created you", "who built you", "who made you"]
-        is_asking_creator = any(kw in user_msg.lower() for kw in creator_keywords)
+        # قائمة شاملة جداً للكلمات المفتاحية بالعربية والإنجليزية لضمان الرد بدقة على أي جهاز
+        creator_keywords = [
+            "من صنعك", "من بنّاك", "من كتبك", "من صممك", "من خلاك", "من برمجك", "من أنشأك", "من هو مطورك", "من مالكك",
+            "who created you", "who built you", "who made you", "who developed you", "your creator", "your developer"
+        ]
+        
+        user_msg_lower = user_msg.lower()
+        is_asking_creator = any(kw in user_msg_lower for kw in creator_keywords)
         
         if is_asking_creator:
             return {"reply": "تم إنشائه وبنائه بواسطة عمي عبدالرحمن"}
@@ -51,4 +56,4 @@ async def chat_endpoint(request: ChatRequest):
         return {"reply": reply}
 
     except Exception as e:
-        raise HTTPException(status_code=500, status_down=str(e))
+        raise HTTPException(status_code=500, detail=str(e))
