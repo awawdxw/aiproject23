@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المساعد الذكي</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-gray-100 h-screen flex flex-col justify-between">
+
+    <!-- Header -->
+    <header class="bg-gray-800 border-b border-gray-700 p-4 text-center shadow-md">
+        <h1 class="text-xl font-bold text-cyan-400">المساعد الذكي الشخصي</h1>
+    </header>
+
+    <!-- Chat Box Container -->
+    <div id="chat-container" class="flex-1 overflow-y-auto p-4 space-y-4 max-w-2xl w-full mx-auto">
+        <!-- Welcoming Message -->
+        <div class="flex items-start space-x-3 space-x-reverse">
+            <div class="bg-cyan-600 text-white rounded-full h-8 w-8 flex items-center justify-center font-bold">AI</div>
+            <div class="bg-gray-800 p-3 rounded-2xl max-w-md shadow-sm border border-gray-700">
+                <p class="text-sm">أهلاً بك! كيف يمكنني مساعدتك اليوم؟</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Input Area -->
+    <div class="bg-gray-800 border-t border-gray-700 p-4">
+        <form id="chat-form" class="max-w-2xl mx-auto flex gap-2">
+            <input 
+                type="text" 
+                id="user-input" 
+                placeholder="اكتب رسالتك هنا..." 
+                class="flex-1 bg-gray-900 border border-gray-700 rounded-xl px-4 py-2 focus:outline-none focus:border-cyan-500 text-sm"
+                autocomplete="off"
+                required
+            >
+            <button 
+                type="submit" 
+                class="bg-cyan-600 hover:bg-cyan-500 text-white px-5 py-2 rounded-xl text-sm font-medium transition duration-200"
+            >
+                إرسال
+            </button>
+        </form>
+    </div>
+
+    <!-- JavaScript for Handling Chat -->
+    <script>
+        const chatContainer = document.getElementById('chat-container');
+        const chatForm = document.getElementById('chat-form');
+        const userInput = document.getElementById('user-input');
+
+        chatForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const message = userInput.value.trim();
+            if (!message) return;
+
+            // Append User Message
+            appendMessage(message, 'user');
+            userInput.value = '';
+
+            // Show Loading Indicator
+            const loadingId = appendLoadingMessage();
+
+            try {
+                // Fetch request using relative path for Render
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message: message })
+                });
+
+                removeLoadingMessage(loadingId);
+
+                if (!response.ok) {
+                    throw new Error('فشل الاتصال بالخادم');
+                }
+
+                const data = await response.json();
+                appendMessage(data.reply, 'ai');
+
+            } catch (error) {
+                removeLoadingMessage(loadingId);
+                appendMessage('عذراً، حدث خطأ في الاتصال بالخادم.', 'ai');
+                console.error('Error:', error);
+            }
+        });
+
+        function appendMessage(text, sender) {
+            const isUser = sender === 'user';
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `flex items-start space-x-3 space-x-reverse ${isUser ? 'flex-row-reverse space-x-reverse' : ''}`;
+
+            messageDiv.innerHTML = `
+                <div class="${isUser ? 'bg-emerald-600' : 'bg-cyan-600'} text-white rounded-full h-8 w-8 flex items-center justify-center font-bold text-xs">
+                    ${isUser ? 'أنت' : 'AI'}
+                </div>
+                <div class="${isUser ? 'bg-emerald-900 border-emerald-800' : 'bg-gray-800 border-gray-700'} p-3 rounded-2xl max-w-md shadow-sm border text-sm leading-relaxed">
+                    <p>${escapeHtml(text)}</p>
+                </div>
+            `;
+
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function appendLoadingMessage() {
+            const id = 'loading-' + Date.now();
+            const messageDiv = document.createElement('div');
+            messageDiv.id = id;
+            messageDiv.className = 'flex items-start space-x-3 space-x-reverse';
+
+            messageDiv.innerHTML = `
+                <div class="bg-cyan-600 text-white rounded-full h-8 w-8 flex items-center justify-center font-bold text-xs">AI</div>
+                <div class="bg-gray-800 p-3 rounded-2xl shadow-sm border border-gray-700 text-sm">
+                    <p class="animate-pulse">جاري الكتابة...</p>
+                </div>
+            `;
+
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+            return id;
+        }
+
+        function removeLoadingMessage(id) {
+            const element = document.getElementById(id);
+            if (element) element.remove();
+        }
+
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, m => map[m]);
+        }
+    </script>
+</body>
+</html>
