@@ -39,7 +39,7 @@ async def chat_endpoint(request: ChatRequest):
         is_asking_creator = any(kw in user_msg_lower for kw in creator_keywords)
         
         if is_asking_creator:
-            return {"reply": "تم إنشائه وبنائه بواسطة عمي عبدالرحمن"}
+            return {"reply": "تم إنشائي وبنائي بواسطة عمي وعم عيالي عبدالرحمن"}
 
         # الرد الطبيعي باستخدام نموذج Qwen
         response = client.chat.completions.create(
