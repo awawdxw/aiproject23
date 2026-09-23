@@ -3,42 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المساعد الذكي</title>
+    <title>Abdulrahman's Chat Bot</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* تخصيص تأثيرات التوهج الذهبي الفاخر */
+        .gold-glow {
+            box-shadow: 0 0 20px rgba(234, 179, 8, 0.4), inset 0 0 10px rgba(234, 179, 8, 0.2);
+        }
+        .gold-text-glow {
+            text-shadow: 0 0 10px rgba(234, 179, 8, 0.6), 0 0 20px rgba(234, 179, 8, 0.4);
+        }
+        /* تحسين مظهر شريط التمرير */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #000000;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #b45309;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #d97706;
+        }
+    </style>
 </head>
-<body class="bg-gray-900 text-gray-100 h-screen flex flex-col justify-between">
+<body class="bg-black text-amber-100 h-screen flex flex-col justify-between selection:bg-amber-500 selection:text-black">
 
     <!-- Header -->
-    <header class="bg-gray-800 border-b border-gray-700 p-4 text-center shadow-md">
-        <h1 class="text-xl font-bold text-cyan-400">المساعد الذكي الشخصي</h1>
+    <header class="bg-neutral-950 border-b-2 border-amber-500/50 p-5 text-center shadow-2xl gold-glow">
+        <h1 class="text-2xl md:text-3xl font-extrabold text-amber-400 tracking-wider gold-text-glow uppercase">
+            ABDULRAHMAN'S CHAT BOT
+        </h1>
     </header>
 
     <!-- Chat Box Container -->
-    <div id="chat-container" class="flex-1 overflow-y-auto p-4 space-y-4 max-w-2xl w-full mx-auto">
+    <div id="chat-container" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 max-w-3xl w-full mx-auto">
         <!-- Welcoming Message -->
-        <div class="flex items-start space-x-3 space-x-reverse">
-            <div class="bg-cyan-600 text-white rounded-full h-8 w-8 flex items-center justify-center font-bold">AI</div>
-            <div class="bg-gray-800 p-3 rounded-2xl max-w-md shadow-sm border border-gray-700">
-                <p class="text-sm">أهلاً بك! كيف يمكنني مساعدتك اليوم؟</p>
+        <div class="flex items-start space-x-4 space-x-reverse">
+            <div class="bg-gradient-to-br from-amber-500 to-amber-700 text-black font-extrabold rounded-2xl h-12 w-12 flex items-center justify-center shadow-lg gold-glow text-lg">AI</div>
+            <div class="bg-neutral-900 border-2 border-amber-500/40 p-4 md:p-5 rounded-3xl max-w-xl shadow-xl gold-glow">
+                <p class="text-lg md:text-xl text-amber-200 leading-relaxed">أهلاً بك! كيف يمكنني مساعدتك اليوم؟</p>
             </div>
         </div>
     </div>
 
     <!-- Input Area -->
-    <div class="bg-gray-800 border-t border-gray-700 p-4">
-        <form id="chat-form" class="max-w-2xl mx-auto flex gap-2">
+    <div class="bg-neutral-950 border-t-2 border-amber-500/50 p-4 md:p-5 shadow-2xl">
+        <form id="chat-form" class="max-w-3xl mx-auto flex gap-3">
             <input 
                 type="text" 
                 id="user-input" 
                 placeholder="اكتب رسالتك هنا..." 
-                class="flex-1 bg-gray-900 border border-gray-700 rounded-xl px-4 py-2 focus:outline-none focus:border-cyan-500 text-sm"
+                class="flex-1 bg-black border-2 border-amber-500/50 rounded-2xl px-5 py-3.5 focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-500/50 text-base md:text-lg text-amber-100 placeholder-amber-700 shadow-inner"
                 autocomplete="off"
                 required
             >
             <button 
                 type="submit" 
-                class="bg-cyan-600 hover:bg-cyan-500 text-white px-5 py-2 rounded-xl text-sm font-medium transition duration-200"
+                class="bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-black px-7 py-3.5 rounded-2xl text-base md:text-lg font-bold transition-all duration-300 shadow-lg gold-glow active:scale-95"
             >
                 إرسال
             </button>
@@ -92,13 +117,13 @@
         function appendMessage(text, sender) {
             const isUser = sender === 'user';
             const messageDiv = document.createElement('div');
-            messageDiv.className = `flex items-start space-x-3 space-x-reverse ${isUser ? 'flex-row-reverse space-x-reverse' : ''}`;
+            messageDiv.className = `flex items-start space-x-4 space-x-reverse ${isUser ? 'flex-row-reverse space-x-reverse' : ''}`;
 
             messageDiv.innerHTML = `
-                <div class="${isUser ? 'bg-emerald-600' : 'bg-cyan-600'} text-white rounded-full h-8 w-8 flex items-center justify-center font-bold text-xs">
+                <div class="${isUser ? 'bg-gradient-to-br from-neutral-700 to-neutral-900 text-amber-400 border border-amber-500/40' : 'bg-gradient-to-br from-amber-500 to-amber-700 text-black'} rounded-2xl h-12 w-12 flex items-center justify-center font-bold text-base shadow-lg gold-glow">
                     ${isUser ? 'أنت' : 'AI'}
                 </div>
-                <div class="${isUser ? 'bg-emerald-900 border-emerald-800' : 'bg-gray-800 border-gray-700'} p-3 rounded-2xl max-w-md shadow-sm border text-sm leading-relaxed">
+                <div class="${isUser ? 'bg-neutral-900 border-2 border-neutral-700 text-amber-100' : 'bg-neutral-900 border-2 border-amber-500/50 text-amber-200'} p-4 md:p-5 rounded-3xl max-w-xl shadow-xl text-base md:text-lg leading-relaxed gold-glow">
                     <p>${escapeHtml(text)}</p>
                 </div>
             `;
@@ -111,11 +136,11 @@
             const id = 'loading-' + Date.now();
             const messageDiv = document.createElement('div');
             messageDiv.id = id;
-            messageDiv.className = 'flex items-start space-x-3 space-x-reverse';
+            messageDiv.className = 'flex items-start space-x-4 space-x-reverse';
 
             messageDiv.innerHTML = `
-                <div class="bg-cyan-600 text-white rounded-full h-8 w-8 flex items-center justify-center font-bold text-xs">AI</div>
-                <div class="bg-gray-800 p-3 rounded-2xl shadow-sm border border-gray-700 text-sm">
+                <div class="bg-gradient-to-br from-amber-500 to-amber-700 text-black rounded-2xl h-12 w-12 flex items-center justify-center font-bold text-base shadow-lg gold-glow">AI</div>
+                <div class="bg-neutral-900 border-2 border-amber-500/50 p-4 md:p-5 rounded-3xl shadow-xl text-base md:text-lg text-amber-300 gold-glow">
                     <p class="animate-pulse">جاري الكتابة...</p>
                 </div>
             `;
